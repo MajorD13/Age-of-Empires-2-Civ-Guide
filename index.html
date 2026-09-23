@@ -53,12 +53,22 @@ function renderList(filter=''){
 function bullets(a){return '<ul class="bonus">'+a.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>'}
 function esc(s){return String(s).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\\':'&bsol;','"':'&quot;'}[c]||c))}
 function buildCard(name,b){return `<div class="card span6"><h3>${esc(name)}</h3><div class="small">${esc(b.goal)}</div><div class="build"><b>Target:</b> ${esc(b.target)}</div><ol class="steps">${b.steps.map(s=>'<li>'+esc(s)+'</li>').join('')}</ol><div class="small">${esc(b.notes)}</div></div>`}
-function showTemplates(){document.getElementById('templates').scrollIntoView({behavior:'smooth'})}
+function showTemplates(){
+  document.getElementById('templates').classList.remove('hidden');
+  document.getElementById('civview').classList.add('hidden');
+  document.getElementById('source-note').classList.remove('hidden');
+  document.querySelectorAll('.civbtn').forEach(b=>b.classList.remove('active'));
+  history.replaceState(null,'',location.pathname);
+  window.scrollTo({top:0,behavior:'smooth'});
+}
 function showCiv(n){
   const c=civs[n];
+  document.getElementById('templates').classList.add('hidden');
+  document.getElementById('civview').classList.remove('hidden');
+  document.getElementById('source-note').classList.add('hidden');
   document.querySelectorAll('.civbtn').forEach(b=>b.classList.toggle('active',b.dataset.civ===n));
   history.replaceState(null,'','#civ='+encodeURIComponent(n));
-  document.getElementById('civview').innerHTML=`<div class="hero"><div><h2>${esc(n)}</h2><p>${esc(c.focus)} • ${esc(c.signature)}</p></div><div class="badge">Current build: 185872</div></div>
+  document.getElementById('civview').innerHTML=`<div class="toc"><a href="#templates" onclick="showTemplates();return false">← Build templates</a></div><div class="hero"><div><h2>${esc(n)}</h2><p>${esc(c.focus)} • ${esc(c.signature)}</p></div><div class="badge">Current build: 185872</div></div>
   <div class="grid">
     <div class="card span8"><h3>Civilization Bonuses</h3>${bullets(c.bonus)}</div>
     <div class="card span4"><h3>At a glance</h3><div class="meta"><div><b>Unique Units</b>${esc(c.uu)}</div><div><b>Unique Technologies</b>${esc(c.ut)}</div><div><b>Team Bonus</b>${esc(c.team)}</div><div><b>Signature plan</b>${esc(c.signature)}</div></div></div>
@@ -78,6 +88,6 @@ function showCiv(n){
 document.getElementById('search').addEventListener('input',e=>renderList(e.target.value));
 renderList();
 const hash=new URLSearchParams(location.hash.slice(1));
-const hc=hash.get('civ'); if(hc && civs[hc]) showCiv(hc); else showCiv('Sicilians');
+const hc=hash.get('civ'); if(hc && civs[hc]) showCiv(hc); else showTemplates();
 </script>
-<div class="source-note" style="max-width:1100px;margin:24px auto 40px;padding:14px 18px;border:1px solid #334155;border-radius:10px;background:#0f172a;color:#cbd5e1;font-size:0.9rem;line-height:1.5"><strong style="color:#fff">Current-patch notes:</strong> Chinese use a Loom-first/force-drop opening; they begin with +3 Villagers but -200 Food/-50 Wood and their Town Centers provide +15 population space. Mayans start with +1 Villager and -50 Food. Britons can run five Shepherds because Shepherds work 25% faster. Gurjaras start with two 175-Food forage bushes and can garrison herdables in Mills for Food. Lithuanians start with +150 Food on normal starts. Persians start with +50 Food and +50 Wood. Goths research Loom instantly and do not have a Dark Age +15 population-space bonus; their +10 population space applies in Imperial Age. Huns do not need Houses and start with -100 Wood. Bengalis spawn 2 Villagers when reaching the next Age. Malay advance 66% faster. Mongol Hunters work 40% faster. These mechanics are reflected in the civ-specific openings above. Current build: 185872 (22 September 2026).</div></body></html>
+<div id="source-note" class="source-note" style="max-width:1100px;margin:24px auto 40px;padding:14px 18px;border:1px solid #334155;border-radius:10px;background:#0f172a;color:#cbd5e1;font-size:0.9rem;line-height:1.5"><strong style="color:#fff">Current-patch notes:</strong> Chinese use a Loom-first/force-drop opening; they begin with +3 Villagers but -200 Food/-50 Wood and their Town Centers provide +15 population space. Mayans start with +1 Villager and -50 Food. Britons can run five Shepherds because Shepherds work 25% faster. Gurjaras start with two 175-Food forage bushes and can garrison herdables in Mills for Food. Lithuanians start with +150 Food on normal starts. Persians start with +50 Food and +50 Wood. Goths research Loom instantly and do not have a Dark Age +15 population-space bonus; their +10 population space applies in Imperial Age. Huns do not need Houses and start with -100 Wood. Bengalis spawn 2 Villagers when reaching the next Age. Malay advance 66% faster. Mongol Hunters work 40% faster. These mechanics are reflected in the civ-specific openings above. Current build: 185872 (22 September 2026).</div></body></html>
